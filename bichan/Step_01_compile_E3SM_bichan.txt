@@ -1,0 +1,65 @@
+## START TO FINISH COMPILE E3SM BICHAN
+### 6/22/26
+
+## 1. SET UP POLARIS ENVIRONMENT 
+
+cd $HOME
+rm pixi
+rm Miniforge3
+
+showquota
+# (make sure there is enough room for the install of polaris)
+# if there isn't enough in $HOME:
+    cd $SCRATCH
+
+git clone git@github.com:E3SM-Project/polaris.git
+cd polaris
+
+# to avoid needing to enter your password multiple times:
+    git config --global credential.helpter store
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/id_ed25519 
+    # or whatever ssh id you want to add
+    # then enter your password when prompted
+
+git submodule update --init --recursive
+
+# perlmutter is a supported machine, so run the deploy command
+./deploy.py --machine pm-cpu --compiler gnu --mpi mpich
+
+# activate the environment
+source $SCRATCH/polaris/load_polaris_pm-cpu_gnu_mpich.sh
+
+## 2. SET UP BICHAN BRANCH
+
+cd $HOME/repos/bichan_WMT_DVD
+
+git clone -b bichan_10022025 git@github.com:dylanschlichting/E3SM.git
+
+cd E3SM
+# to avoid needing to enter your password multiple times:
+    git config --global credential.helpter store
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/id_ed25519 
+    # or whatever ssh id you want to add
+    # then enter your password when prompted
+
+git submodule update --init --recursive
+
+# activate the polaris environment 
+source $SCRATCH/polaris/load_polaris_pm-cpu_gnu_mpich.sh
+
+## 3. COMPILE MODEL
+cd components/mpas-ocean
+
+make gnu-cray 
+
+# do NOT run make gnu-cray -j 8. this parallelizes the compilation process (apparently), and you will 
+# have module mismatches and errors.
+
+# you will now have the following in the directory 
+# ~/repos/bichan_WMT_DVD/E3SM/components/mpas-ocean
+
+# 1. ocean_model (executable)
+# 2. namelist.ocean (user configuration; eg timestep, viscosity)
+# 3. streams.ocean (output configuration; what variables to write and when)

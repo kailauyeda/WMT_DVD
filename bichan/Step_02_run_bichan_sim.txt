@@ -1,0 +1,162 @@
+## START TO FINISH SET UP AND RUN A BICHAN SIMULATION
+6/22/26
+
+cd $SCRATCH/bichan/bichan_WMT_DVD_sims
+
+mkdir 10km # or whatever resolution you are going to run
+
+## 1. ADD/MAKE NECESSARY FILES
+
+# copy executable, namelist, and streams files to simulation directory
+
+cp ~/repos/bichan_WMT_DVD/E3SM/components/mpas-ocean/ocean_model .
+cp ~/repos/bichan_WMT_DVD/E3SM/components/mpas-ocean/namelist.ocean .
+cp ~/repos/bichan_WMT_DVD/E3SM/components/mpas-ocean/streams.ocean .
+
+# copy Kyle's mesh generation set up file
+cp /global/cfs/cdirs/m4304/kehinson/channel_runs/bin/mpaso_setups/channel_case_new.py channel_case.py
+
+# change channel_case.py so that num-layer default =50 and wind-stress default = 0.10
+vi channel_case.py
+
+# Inside the case directory, on the command line change the following
+# TO DO THIS STEP, YOU NEED TO USE THE CALCULATIONS IN THE chan_args_namelists jupyter notebook
+
+####### In theory, this code block should work, but the channel_case.py file is out of date.
+####### Instead, copy Dylan's graph partition and mesh files 
+####### cp /pscratch/sd/d/dylan617/bichan/mpaso/new_hres/10km/*channel* .
+    python channel_case.py \
+    --case-name=10km_channel \
+    --num-xcell=10 \
+    --num-ycell=34 \
+    --len-edges=10000 \
+    --num-layer=50 \
+    --wind-stress=0.1
+    
+    # generate the graph partition file
+    # where nranks is the # of nodes times the number of steps (128)
+        # 4nodes = 512 ranks, 8nodes = 1028 ranks
+        # gpmetis 400m_channel_graph.info <nranks>
+    
+    gpmetis 10km_channel_graph.info 128
+
+########
+
+## 2. CONFIGURE NAMELIST AND STREAMS FILE
+
+## a) CONFIGURE NAMELIST
+# recall: for these experiments, we want to turn on DVD and WMT diagnostics
+# recall: for bichan specifically, we need to make sure that the harmonic and biharmonic viscosity is 
+# twice that of what is prescribed by Kyle Hinson's paper
+# Towards high-fidelity simulations of coastal submesoscale baroclinic instabilities with MPAS-O (vE3SM3.0.0) 
+# Part I: Idealized experiments
+
+# turn on DVD
+&tracer_forcing_numericalMixingTracers
+    config_use_numericalMixingTracers = .true.
+
+&AM_discreteVarianceDecay
+    config_AM_discreteVarianceDecay_enable = .true.
+    config_AM_discreteVarianceDecay_compute_interval = 'dt'
+    config_AM_discreteVarianceDecay_output_stream = 'discreteVarianceDecayOutput'
+    config_AM_discreteVarianceDecay_compute_on_startup = .true.
+    config_AM_discreteVarianceDecay_write_on_startup = .false.
+
+
+# change the namelist to match the calculated parameters from the chan_args_namelists jupyter notebook
+# note that we do not change config_tracer_del* because this changes kappa_h, which is not prescribed in bichan.
+
+config_dt= 00: 0 : 24.0 
+config_use_mom_del2 = .true.
+config_mom_del2= 0.222 
+config_use_mom_del4 = .true.
+config_mom_del4= 3.1573e+05 
+config_btr_dt= 0 : 2
+
+
+# also check the stride and configuration in namelist.ocean
+&io
+    config_write_output_on_startup = .true.
+    config_pio_num_iotasks = <nodes requested> # usually 1 or 4...
+    config_pio_stride = 1 
+/
+
+# change the namelist "input files"
+config_block_decomp_file_prefix = '400m_channel_graph.info.part.'
+config_proc_decomp_file_prefix = '400m_channel_graph.info.part.'
+
+## b) CONFIGURE STREAMS FILE
+<immutable_stream name="mesh"
+                  type="input"
+                  filename_template="10km_channel_init.nc"
+                  input_interval="initial_only" />
+
+<immutable_stream name="input"
+                  type="input"
+                  filename_template="10km_channel_init.nc"
+                  input_interval="initial_only" />
+
+<immutable_stream name="restart"
+                  type="input;output"
+                  filename_template="restarts/restart.$Y-$M-$D_$h.$m.$s.nc"
+                  filename_interval="output_interval"
+                  reference_time="0001-01-01_00:00:00"
+                  clobber_mode="truncate"
+                  input_interval="initial_only"
+                  output_interval="00-00-30_00:00:00" />
+
+# edit the output variables you want
+<stream name="output"
+        type="output"
+        filename_template="output/output.$Y-$M-$D_$h.$m.$s.nc"
+        filename_interval="01-00-00_00:00:00"
+        reference_time="0001-01-01_00:00:00"
+        clobber_mode="truncate"
+        precision="single"
+        output_interval="00-00-00_02:00:00" >
+
+        <stream name="mesh"/>
+        <var_struct name="tracers"/>
+        <var name="layerThickness"/>
+        <var name="ssh"/>
+        <var name="xtime"/>
+        <var name="vertDiffTopOfCell"/>
+        <var name="vertViscTopOfCell"/>
+        <var name="vertVelocityTop"/>
+        <var name="kineticEnergyCell"/>
+        <var name="relativeVorticityCell"/>
+        <var name="divergence"/>
+</stream>
+
+<stream name="globalStatsOutput"
+        type="output"
+        filename_template="analysis_members/globalStats.$Y-$M-$D_$h.$m.$s.nc"
+        filename_interval="01-00-00_00:00:00"
+        clobber_mode="truncate"
+        packages="globalStatsAMPKG"
+        output_interval="0000_06:00:00" >
+
+        <var_array name="minGlobalStats"/>
+        <var_array name="maxGlobalStats"/>
+        <var_array name="sumGlobalStats"/>
+        <var_array name="rmsGlobalStats"/>
+        <var_array name="avgGlobalStats"/>
+        <var_array name="vertSumMinGlobalStats"/>
+        <var_array name="vertSumMaxGlobalStats"/>
+        <var name="xtime"/>
+        <var name="daysSinceStartOfSim"/>
+        <var name="volumeCellGlobal"/>
+        <var name="CFLNumberGlobal"/>
+</stream>
+
+### THE WMT DIAGNOSTICS NEED TO BE CHECKED 
+
+
+## 3. RUN MODEL
+
+# load polaris environment
+source $SCRATCH/polaris/load_polaris_pm-cpu_gnu_mpich.sh
+
+salloc -N 1 -n 128 --qos interactive --time 02:00:00 --constraint cpu --account=m5260
+
+srun -n 128 ./ocean_model -n namelist.ocean -s streams.ocean
