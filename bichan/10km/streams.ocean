@@ -48,28 +48,15 @@ streams_10000m_50_layers_gmd.ocean<streams>
        <var name="velocityZonal"/>
        <var name="velocityMeridional"/>       
        <var name="windStressZonal"/>     
-       <var name="boundaryLayerDepth"/>      
-</stream>
-
-<stream name="timeSeriesStatsMonthlyOutput"
-        type="output"
-        filename_template="analysis_members/10km_channel_WMT_Monthly.$Y-$M-$D.nc"
-        filename_interval="01-00-00_00:00:00"
-        reference_time="0001-01-01_00:00:00"
-        clobber_mode="truncate"
-        useMissingValMask="true"
-        io_type="pnetcdf"
-        output_interval="00-00-02_00:00:00" >
-
-	<var name="xtime"/>
-        <var_struct name="tracers"/>
-        <var_struct name="tracersSurfaceFlux"/>
-	<var_array name="activeTracersTend"/>
-        <var_array name="activeTracerHorizontalAdvectionTendency"/>
-        <var_array name="activeTracerVerticalAdvectionTendency"/>
-        <var_array name="activeTracerVertMixTendency"/>
-        <var_array name="activeTracerHorMixTendency"/>
-        <var_array name="activeTracerSurfaceFluxTendency"/>
+       <var name="boundaryLayerDepth"/>
+       <var_struct name="tracers"/>
+       <var_struct_name="tracerSurfaceFlux"/>
+       <var_array name="activeTracersTend"/>
+       <var_array name="activeTracerHorizontalAdvectionTendency"/>
+       <var_array name="activeTracerVerticalAdvectionTendency"/>
+       <var_array name="activeTracerVertMixTendency"/>
+       <var_array name="activeTracerHorMixTendency"/>
+       <var_array name="activeTracerSurfaceFluxTendency"/>	      
 </stream>
 
 <stream name="discreteVarianceDecayOutput"
