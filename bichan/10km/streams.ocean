@@ -49,6 +49,8 @@ streams_10000m_50_layers_gmd.ocean<streams>
        <var name="velocityMeridional"/>       
        <var name="windStressZonal"/>     
        <var name="boundaryLayerDepth"/>
+       <var name="density"/>
+       <var name="potentialDensity"/>
        <var_struct name="tracers"/>
        <var_struct_name="tracerSurfaceFlux"/>
        <var_array name="activeTracersTend"/>
