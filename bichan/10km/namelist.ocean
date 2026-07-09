@@ -6,7 +6,7 @@
     config_restart_timestamp_name = 'Restart_timestamp'
     config_start_time = '0001-01-01_00:00:00'
     config_stop_time = 'none'
-    config_run_duration = '00-00-60_00:00:00'
+    config_run_duration = '00-00-12_00:00:00'
     config_calendar_type = 'noleap'
     config_output_reference_time = '0001-01-01_00:00:00'
 /
@@ -879,8 +879,8 @@
     config_AM_timeSeriesStatsCustom_reference_times = 'initial_time'
     config_AM_timeSeriesStatsCustom_duration_intervals = 'repeat_interval'
     config_AM_timeSeriesStatsCustom_repeat_intervals = 'reset_interval'
-    config_AM_timeSeriesStatsCustom_reset_intervals = '00-00-00_02:00:00'
-    config_AM_timeSeriesStatsCustom_backward_output_offset = '00-00-00_02:00:00'
+    config_AM_timeSeriesStatsCustom_reset_intervals = '00-00-00_00:10:00'
+    config_AM_timeSeriesStatsCustom_backward_output_offset = '00-00-00_00:10:00'
 /
 &AM_pointwiseStats
     config_AM_pointwiseStats_enable = .false.
