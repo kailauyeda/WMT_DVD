@@ -1,4 +1,4 @@
-streams_10000m_50_layers_gmd.ocean<streams>
+<streams>
 <immutable_stream name="mesh"
                   type="input"
                   filename_template="10km_channel_init.nc"
@@ -32,33 +32,13 @@ streams_10000m_50_layers_gmd.ocean<streams>
         reference_time="0001-01-01_00:00:00"
         clobber_mode="truncate"
         precision="single"
-        output_interval="00-00-00_02:00:00" >
+        output_interval="00-00-00_00:10:00" >
 
        <var name="xtime"/>
        <var_struct name="tracers"/>
        <var name="layerThickness"/>
-       <var name="ssh"/>
-       <var name="vertDiffTopOfCell"/>
-       <var name="vertViscTopOfCell"/>
-       <var name="vertVelocityTop"/>
-       <var name="kineticEnergyCell"/>
-       <var name="relativeVorticityCell"/>
-       <var name="divergence"/>
-       <var name="normalVelocity"/>
-       <var name="velocityZonal"/>
-       <var name="velocityMeridional"/>       
-       <var name="windStressZonal"/>     
-       <var name="boundaryLayerDepth"/>
        <var name="density"/>
-       <var name="potentialDensity"/>
-       <var_struct name="tracers"/>
-       <var_struct_name="tracerSurfaceFlux"/>
-       <var_array name="activeTracersTend"/>
-       <var_array name="activeTracerHorizontalAdvectionTendency"/>
-       <var_array name="activeTracerVerticalAdvectionTendency"/>
-       <var_array name="activeTracerVertMixTendency"/>
-       <var_array name="activeTracerHorMixTendency"/>
-       <var_array name="activeTracerSurfaceFluxTendency"/>	      
+       <var name="potentialDensity"/>	      
 </stream>
 
 <stream name="discreteVarianceDecayOutput"
@@ -69,7 +49,7 @@ streams_10000m_50_layers_gmd.ocean<streams>
         clobber_mode="truncate"
         precision="single"
         packages="discreteVarianceDecayAMPKG"
-        output_interval="00-00-00_02:00:00" >
+        output_interval="00-00-00_00:10:00" >
 
         <var name="xtime"/>
         <var_array name="chiSpurTracerBR08"/>
@@ -78,17 +58,23 @@ streams_10000m_50_layers_gmd.ocean<streams>
 
 <stream name="timeSeriesStatsCustomOutput"
         type="output"
-        filename_template="analysis_members/mpaso.hist.am.timeSeriesStatsCustom_10km_channel.$Y-$M-$D.nc"
+        filename_template="analysis_members/mpaso.hist.am.timeSeriesStatsCustomAvg_10km_channel.$Y-$M-$D.nc"
         filename_interval="00-01-00_00:00:00"
         reference_time="01-01-01_00:00:00"
         clobber_mode="truncate"
         precision="double"
         packages="timeSeriesStatsCustomAMPKG"
-        output_interval="0000_02:00:00">
+        output_interval="0000_00:10:00">
 
         <var name="xtime"/>
-        <var name="layerThickness"/>
-        <var name="potentialDensity"/>
+	<var name="kineticEnergyCell"/>
+	<var name="relativeVorticityCell"/>
+	<var name="vertVelocityTop"/>
+        <var_struct_name="tracers"/>
+	<var_struct_name="tracerSurfaceFlux"/>
+	<var_array name="activeTracerVertMixTendency"/>
+	<var_array name="activeTracerSurfaceFluxTendency"/>
+	<var_array name="activeTracerHorMixTendency"/>
         <var_array name="activeTracers"/>
         <var_array name="chiSpurTracerBR08"/>
         <var_array name="chiPhyVerTracer"/>

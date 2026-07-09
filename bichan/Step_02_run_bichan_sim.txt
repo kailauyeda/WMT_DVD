@@ -126,6 +126,8 @@ config_proc_decomp_file_prefix = '400m_channel_graph.info.part.'
         <var name="kineticEnergyCell"/>
         <var name="relativeVorticityCell"/>
         <var name="divergence"/>
+        <var name="density"/>
+        <var name="potentialDensity"/>
 </stream>
 
 <stream name="globalStatsOutput"
