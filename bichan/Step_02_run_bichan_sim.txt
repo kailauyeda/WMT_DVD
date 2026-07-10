@@ -1,7 +1,7 @@
 ## START TO FINISH SET UP AND RUN A BICHAN SIMULATION
 6/22/26
 
-cd $SCRATCH/bichan/bichan_WMT_DVD_sims
+cd $SCRATCH/WMT_DVD/bichan/
 
 mkdir 10km # or whatever resolution you are going to run
 
@@ -25,7 +25,7 @@ vi channel_case.py
 ####### In theory, this code block should work, but the channel_case.py file is out of date.
 ####### Instead, copy Dylan's graph partition and mesh files 
 ####### cp /pscratch/sd/d/dylan617/bichan/mpaso/new_hres/10km/*channel* .
-    python channel_case.py \
+    python -u channel_case.py \
     --case-name=10km_channel \
     --num-xcell=10 \
     --num-ycell=34 \
