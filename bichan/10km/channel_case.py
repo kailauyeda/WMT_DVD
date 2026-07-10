@@ -317,9 +317,21 @@ def build_sfrc(args, mesh):
         dstr = date.strftime("%Y-%m-%d_%H:%M:%S"+45*" ")
         tstr.append(dstr)
     
+    # tvar = sfrc.createVariable("xtime", "S1", ("Time", "StrLen"))
+    # tstr = np.array(tstr, "S64")
+    # tvar[:, :] = nc.stringtochar(tstr)
+
+    # to prevent break, attempt with this chatgpt-generated workaround
+    # above code had problem due to incompatibilities between numpy and netcdf versions...
+    
     tvar = sfrc.createVariable("xtime", "S1", ("Time", "StrLen"))
-    tstr = np.array(tstr, "S64")
-    tvar[:, :] = nc.stringtochar(tstr)
+
+    # Convert list of strings to a (Time, StrLen) array of S1 characters
+    chars = np.empty((len(tstr), 64), dtype="S1")
+    for i, s in enumerate(tstr):
+        chars[i, :] = np.frombuffer(s.encode("ascii"), dtype="S1")
+
+    tvar[:, :] = chars
 
     sfrc.close()
 
