@@ -218,7 +218,7 @@ def build_init(args, mesh):
     # salinity dependent on y and z
     salt = args.salinity0 + \
         (args.m_squared * RHO0 / (args.beta * GRAV)) * \
-        ((ymid - half) + 
+        ((ymid - half) - 
         4 * dy * zmid / args.num_layer)
 
     print("trc. S-min. =", salt.min().values)
