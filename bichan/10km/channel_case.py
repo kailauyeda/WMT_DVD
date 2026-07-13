@@ -200,8 +200,8 @@ def build_init(args, mesh):
 
     # changed salinity, so must change temp to maintain density
     temp = args.temperature0 + \
-        (args.n_squared * zmid / (GRAV * RHO0)) + \
-        (args.m_squared * 4 * dy * zmid/ (GRAV * args.num_layer))
+        (args.n_squared * zmid * RHO0 / GRAV) + \
+        (args.m_squared * 4 * dy * zmid / (GRAV * args.num_layer))
 
     print("trc. T-min. =", temp.min().values)
     print("trc. T-max. =", temp.max().values)
