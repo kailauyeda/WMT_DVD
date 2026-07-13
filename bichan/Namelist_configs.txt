@@ -1,0 +1,21 @@
+Namelist configurations for bichan simulations
+
+10km
+
+
+========================
+5km
+BUILD MESH
+python channel_case.py \
+--case-name=5km_channel \
+--num-xcell=20 \
+--num-ycell=70 \
+--len-edges=5000 \
+--wind-stress=0.1
+
+-----------
+ NAMELIST CHANGES
+config_dt= 00: 5 : 0.0 
+config_mom_del2= 2.775 
+config_mom_del4= 1.5417e+09 
+config_btr_dt= 0 : 30
