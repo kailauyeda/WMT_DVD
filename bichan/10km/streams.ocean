@@ -70,6 +70,7 @@
 	<var name="kineticEnergyCell"/>
 	<var name="relativeVorticityCell"/>
 	<var name="vertVelocityTop"/>
+	<var name="vertDiffTopOfCell"/>
         <var_struct_name="tracers"/>
 	<var_struct_name="tracerSurfaceFlux"/>
 	<var_array name="activeTracerVertMixTendency"/>
