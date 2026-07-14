@@ -1,7 +1,10 @@
 Namelist configurations for bichan simulations
 
 10km
-
+10km_channel_output.nc_12day_HF
+- 12 day, dt = 10mins, output interval =10 mins
+- ran in an attempt to diagnose why there is so much noise in the dM/dt calculation
+- forced with initial salinity field S(t=0) = S(z,y) 
 
 ========================
 5km
