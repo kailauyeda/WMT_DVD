@@ -6,7 +6,7 @@
     config_restart_timestamp_name = 'Restart_timestamp'
     config_start_time = '0001-01-01_00:00:00'
     config_stop_time = 'none'
-    config_run_duration = '00-00-12_00:00:00'
+    config_run_duration = '00-00-60_00:00:00'
     config_calendar_type = 'noleap'
     config_output_reference_time = '0001-01-01_00:00:00'
 /
@@ -181,7 +181,7 @@
     config_sgr_salinity_prescribed = 0.0
 /
 &time_varying_forcing
-    config_use_time_varying_atmospheric_forcing = .true.
+    config_use_time_varying_atmospheric_forcing = .false.
     config_time_varying_atmospheric_forcing_type = 'WINDPRES'
     config_time_varying_atmospheric_forcing_start_time = '0001-01-01_00:00:00'
     config_time_varying_atmospheric_forcing_reference_time = '0001-01-01_00:00:00'

@@ -18,13 +18,6 @@
                   input_interval="initial_only"
                   output_interval="0005_00:00:00" />
 
-<immutable_stream name="atmospheric_forcing"
-                  type="input"
-                  filename_template="10km_channel_forcing.nc"
-                  filename_interval="none"
-                  packages="timeVaryingAtmosphericForcingPKG"
-                  input_interval="none"/>
-
 <stream name="output"
         type="output"
         filename_template="10km_channel_output.nc"
@@ -32,7 +25,7 @@
         reference_time="0001-01-01_00:00:00"
         clobber_mode="truncate"
         precision="single"
-        output_interval="00-00-00_00:10:00" >
+        output_interval="00-00-00_02:00:00" >
 
        <var name="xtime"/>
        <var_struct name="tracers"/>
@@ -59,18 +52,19 @@
 <stream name="timeSeriesStatsCustomOutput"
         type="output"
         filename_template="analysis_members/mpaso.hist.am.timeSeriesStatsCustomAvg_10km_channel.$Y-$M-$D.nc"
-        filename_interval="00-01-00_00:00:00"
+        filename_interval="01-00-00_00:00:00"
         reference_time="01-01-01_00:00:00"
         clobber_mode="truncate"
         precision="double"
         packages="timeSeriesStatsCustomAMPKG"
-        output_interval="0000_00:10:00">
+        output_interval="0000_02:00:00">
 
         <var name="xtime"/>
 	<var name="kineticEnergyCell"/>
 	<var name="relativeVorticityCell"/>
 	<var name="vertVelocityTop"/>
 	<var name="vertDiffTopOfCell"/>
+	<var name="layerThickness"/>
         <var_struct_name="tracers"/>
 	<var_struct_name="tracerSurfaceFlux"/>
 	<var_array name="activeTracerVertMixTendency"/>
