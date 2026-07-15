@@ -6,6 +6,16 @@ Namelist configurations for bichan simulations
 - ran in an attempt to diagnose why there is so much noise in the dM/dt calculation
 - forced with initial salinity field S(t=0) = S(z,y) 
 
+10km_channel_output.nc_60day_wind
+- 60 day, dt = 10 mins, output interval = 2 hours
+- ran with time_varying_wind = .true. (namelist)
+- ran with immutable_streams = "atmospheric forcing"
+
+10km_channel_output.nc
+- 60 day, dt = 10 mins, output interval = 2 hours
+- time_varying_wind = .false. (namelist)
+- ran without immutable_streams = "atmospheric forcing"
+
 ========================
 5km
 BUILD MESH
