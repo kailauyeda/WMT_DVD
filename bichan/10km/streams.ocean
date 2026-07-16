@@ -70,6 +70,8 @@
 	<var_array name="activeTracerVertMixTendency"/>
 	<var_array name="activeTracerSurfaceFluxTendency"/>
 	<var_array name="activeTracerHorMixTendency"/>
+	<var_array name="activeTracerHorizontalAdvectionTendency"/>
+	<var_array name="activeTracerVerticalAdvectionTendency"/>
         <var_array name="activeTracers"/>
         <var_array name="chiSpurTracerBR08"/>
         <var_array name="chiPhyVerTracer"/>
