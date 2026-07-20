@@ -11,10 +11,25 @@ Namelist configurations for bichan simulations
 - ran with time_varying_wind = .true. (namelist)
 - ran with immutable_streams = "atmospheric forcing"
 
-10km_channel_output.nc
+10km_channel_output.nc_with_vertAdv
 - 60 day, dt = 10 mins, output interval = 2 hours
 - time_varying_wind = .false. (namelist)
 - ran without immutable_streams = "atmospheric forcing"
+- config_disable_thick_vadv = .false.
+- config_disable_vel_vadv = .false.
+
+10km_channel_output.nc_no_adv
+- 60 day, dt = 10 mins, output interval = 2 hours
+- time_varying_wind = .false. (namelist)
+- ran without immutable streams = "atmospheric forcing"
+- config_disable_thick_vadv = .true.
+- config_disable_vel_vadv = .true.
+- config_disable_vel_all_tend = .true.
+- config_disable_thick_hadv = .true.
+- config_disable_vel_hadv = .true.
+- config_disable_tr_adv = .true.
+- run without vertical advection turned on; vertical advection is not part of the advection operator
+- corresponding namelist has suffix "no_adv"
 
 ========================
 5km
