@@ -8,19 +8,19 @@ Namelist configurations for bichan simulations
 
 10km_channel_output.nc_60day_wind
 - 60 day, dt = 10 mins, output interval = 2 hours
-- ran with time_varying_wind = .true. (namelist)
+- ran with time_varying_atmospheric_forcing = .true. (namelist)
 - ran with immutable_streams = "atmospheric forcing"
 
 10km_channel_output.nc_with_vertAdv
 - 60 day, dt = 10 mins, output interval = 2 hours
-- time_varying_wind = .false. (namelist)
+- time_varying_atmospheric_forcing = .false. (namelist)
 - ran without immutable_streams = "atmospheric forcing"
 - config_disable_thick_vadv = .false.
 - config_disable_vel_vadv = .false.
 
 10km_channel_output.nc_no_adv
 - 60 day, dt = 10 mins, output interval = 2 hours
-- time_varying_wind = .false. (namelist)
+- time_varying_atmospheric_forcing = .false. (namelist)
 - ran without immutable streams = "atmospheric forcing"
 - config_disable_thick_vadv = .true.
 - config_disable_vel_vadv = .true.
@@ -31,9 +31,24 @@ Namelist configurations for bichan simulations
 - run without vertical advection turned on; vertical advection is not part of the advection operator
 - corresponding namelist has suffix "no_adv"
 
-10km_channel_output.nc_12day_HF_no_adv_no_ALE
+10km_channel_output.nc_no_adv_no_ALE
+- 60 day, dt = 10 mins, output interval = 2 hours
+- time_varying_atmospheric_forcing = .false. (namelist)
+- ran without immutable streams = "atmospheric forcing"
+- config_vert_coord_movement = "impermeable_interfaces"
+^^ an attempt to turn off ALE
+- config_disable_thick_vadv = .true.
+- config_disable_vel_vadv = .true.
+- config_disable_vel_all_tend = .true.
+- config_disable_thick_hadv = .true.
+- config_disable_vel_hadv = .true.
+- config_disable_tr_adv = .true.
+- run without vertical advection turned on; vertical advection is not part of the advection operator
+- corresponding namelist has suffix "no_adv"
+
+10km_channel_output.nc_12day_HF_no_adv_no_ALE_no_diff
 - 12 day, dt = 10 mins, output interval = 10 mins
-- time_varying_wind = .false (namelist)
+- time_varying_atmospheric_forcing = .false (namelist)
 - ran without immutable streams = "atmospheric forcing"
 - disabled all adv terms as above (see _no_adv)
 - config_vert_coord_movement = "impermeable_interfaces"
@@ -61,3 +76,26 @@ config_dt= 00: 5 : 0.0
 config_mom_del2= 2.775 
 config_mom_del4= 1.5417e+09 
 config_btr_dt= 0 : 30
+
+---------------------
+SIMULATIONS
+
+5km_channel_output.nc_30days
+- 30 days, dt = 5 mins, output interval = 2 hours
+- time_varying_atmospheric_forcing = .false. (namelist)
+- ran without immutable streams = "atmospheric forcing"
+- corresponding output files have suffix "_30days"
+
+5km_channel_output.nc_12day_no_adv_no_ALE
+- 12 days, dt = 5 mins, output interval = 5 mins
+- time_varying_atmospheric_forcing = .false. (namelist)
+- ran without immutable streams = "atmospheric forcng"
+- otherwise same namelist set up as 10km_channel_output.nc_12day_HF_no_adv_no_ALE
+- corresponding output files have suffix "12day_no_adv_no_ALE"
+
+5km_channel_output.nc_12day_no_adv_no_ALE_no_diff
+- 12 days, dt = 5 mins, output interval = 5 mins
+- time_varying_atmospheric_forcing = .false. (namelist)
+- ran without immutable streams = "atmospheric forcng"
+- otherwise same namelist set up as 10km_channel_output.nc_12day_HF_no_adv_no_ALE_no_diff
+- corresponding output files have suffix "12day_no_adv_no_ALE_no_diff"
