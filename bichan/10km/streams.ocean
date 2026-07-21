@@ -25,7 +25,7 @@
         reference_time="0001-01-01_00:00:00"
         clobber_mode="truncate"
         precision="double"
-        output_interval="00-00-00_02:00:00" >
+        output_interval="00-00-00_00:10:00" >
 
        <var name="xtime"/>
        <var_struct name="tracers"/>
@@ -57,7 +57,7 @@
         clobber_mode="truncate"
         precision="double"
         packages="timeSeriesStatsCustomAMPKG"
-        output_interval="0000_02:00:00">
+        output_interval="0000_00:10:00">
 
         <var name="xtime"/>
 	<var name="kineticEnergyCell"/>

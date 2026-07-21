@@ -85,6 +85,7 @@ SIMULATIONS
 - time_varying_atmospheric_forcing = .false. (namelist)
 - ran without immutable streams = "atmospheric forcing"
 - corresponding output files have suffix "_30days"
+- run with streams.ocean_30days and namelist.ocean_30days
 
 5km_channel_output.nc_12day_no_adv_no_ALE
 - 12 days, dt = 5 mins, output interval = 5 mins
@@ -92,6 +93,7 @@ SIMULATIONS
 - ran without immutable streams = "atmospheric forcng"
 - otherwise same namelist set up as 10km_channel_output.nc_12day_HF_no_adv_no_ALE
 - corresponding output files have suffix "12day_no_adv_no_ALE"
+- run with streams.ocean and namelist.ocean_no_adv_no_ALE
 
 5km_channel_output.nc_12day_no_adv_no_ALE_no_diff
 - 12 days, dt = 5 mins, output interval = 5 mins
@@ -99,3 +101,42 @@ SIMULATIONS
 - ran without immutable streams = "atmospheric forcng"
 - otherwise same namelist set up as 10km_channel_output.nc_12day_HF_no_adv_no_ALE_no_diff
 - corresponding output files have suffix "12day_no_adv_no_ALE_no_diff"
+- run with streams.ocean and namelist.ocean_no_adv_no_ALE_no_diff
+
+========================
+1 km
+
+BUILD MESH
+python -u channel_case.py \
+--case-name=1km_channel \
+--num-xcell=100 \
+--num-ycell=346 \
+--len-edges=1000
+
+-----------
+NAMELIST CHANGES
+config_dt= 00: 1 : 0.0 
+config_mom_del2= 0.555 
+config_mom_del4= 1.2333e+07 
+config_btr_dt= 0 : 6
+
+SIMULATIONS
+
+1km_channel_output.nc_20days
+- 20 days, dt = 1 min, output interval = 2 hours
+- all other set-up is same as 5km_channel_output.nc_30days and 10km_channel_output.nc_60days
+- corresponding output files have suffix "_20days"
+- run with streams.ocean_20days and namelist.ocean_20days
+
+
+1km_channel_output.nc_3day_no_adv_no_ALE
+- 3 days, dt = 1 mink output interval = 1 min
+- all other set-up is same as 5km_channel_output.nc_12day_no_adv_no_ALE and 10km_channel_output.nc_12day_no_adv_no_ALE
+- corresponding output files have suffix "_3day_no_adv_no_ALE"
+- run with streams.ocean_no_adv_no_ALE and namelist.ocean_no_adv_no_ALE
+
+1km_channel_output.nc_3day_no_adv_no_ALE_no_diff
+- 3 days, dt = 1 mink output interval = 1 min
+- all other set-up is same as 5km_channel_output.nc_12day_no_adv_no_ALE_no_diff and 10km_channel_output.nc_12day_no_adv_no_ALE_no_diff
+- corresponding output files have suffix "_3day_no_adv_no_ALE_no_diff"
+- run with streams.ocean_no_adv_no_ALE_no_diff and namelist.ocean_no_adv_no_ALE_no_diff

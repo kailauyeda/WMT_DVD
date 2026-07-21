@@ -161,4 +161,10 @@ source $SCRATCH/polaris/load_polaris_pm-cpu_gnu_mpich.sh
 
 salloc -N 1 -n 128 --qos interactive --time 02:00:00 --constraint cpu --account=m5260
 
-srun -n 128 ./ocean_model -n namelist.ocean -s streams.ocean
+srun -n 128 ./ocean_model -n namelist.ocean_20days -s streams.ocean_20days
+
+# to prevent outputting in terminal window
+nohup  srun -n 128 ./ocean_model -n namelist.ocean_no_adv_no_ALE_no_diff -s streams.ocean_no_adv_no_ALE_no_diff > model_run.log_no_adv_no_ALE_no_diff 2>&1 &
+
+# check if running with
+jobs
