@@ -38,6 +38,10 @@ Namelist configurations for bichan simulations
 - disabled all adv terms as above (see _no_adv)
 - config_vert_coord_movement = "impermeable_interfaces"
 ^^ an attempt to turn off ALE
+- manually set background diffusivity and viscosity = 0
+- config_cvmix_background_diffusion = 0
+- config_cvmix_background_diffusion_passive = 0
+- config_cvmix_background_viscosity = 0 
 - corresponding namelist has suffix "no_adv_no_ALE"
 - corresponding output files have suffix "12day_HF_no_adv_no_ALE"
 
