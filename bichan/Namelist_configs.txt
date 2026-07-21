@@ -31,6 +31,16 @@ Namelist configurations for bichan simulations
 - run without vertical advection turned on; vertical advection is not part of the advection operator
 - corresponding namelist has suffix "no_adv"
 
+10km_channel_output.nc_12day_HF_no_adv_no_ALE
+- 12 day, dt = 10 mins, output interval = 10 mins
+- time_varying_wind = .false (namelist)
+- ran without immutable streams = "atmospheric forcing"
+- disabled all adv terms as above (see _no_adv)
+- config_vert_coord_movement = "impermeable_interfaces"
+^^ an attempt to turn off ALE
+- corresponding namelist has suffix "no_adv_no_ALE"
+- corresponding output files have suffix "12day_HF_no_adv_no_ALE"
+
 ========================
 5km
 BUILD MESH
