@@ -164,7 +164,7 @@ salloc -N 1 -n 128 --qos interactive --time 02:00:00 --constraint cpu --account=
 srun -n 128 ./ocean_model -n namelist.ocean_20days -s streams.ocean_20days
 
 # to prevent outputting in terminal window
-nohup  srun -n 128 ./ocean_model -n namelist.ocean_no_adv_no_ALE_no_diff -s streams.ocean_no_adv_no_ALE_no_diff > model_run.log_no_adv_no_ALE_no_diff 2>&1 &
+nohup  srun -n 128 ./ocean_model -n namelist.ocean_no_adv_no_ALE -s streams.ocean_no_adv_no_ALE > model_run.log_no_adv_no_ALE 2>&1 &
 
 # check if running with
 jobs
