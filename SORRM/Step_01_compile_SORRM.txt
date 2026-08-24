@@ -1,0 +1,117 @@
+SORRM From 200 year restart
+Following Dylan's HackMD instructions
+https://hackmd.io/@dschlichting/BJgjtBRBMe
+
+mkdir $SCRATCH/SORRM_WMT_DVD
+git clone -b sorrm_w_dvd git@github.com:dylanschlichting/E3SM.git
+
+cd SORRM_WMT_DVD/E3SM
+
+# to avoid needing to enter your password multiple times:
+    git config --global credential.helpter store
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/id_ed25519 
+    # or whatever ssh id you want to add
+    # then enter your password when prompted
+
+
+git submodule update --init --recursive
+
+export E3SM_REPO=/pscratch/sd/k/kuyeda/SORRM_WMT_DVD/E3SM
+cd $E3SM_REPO/cime/scripts
+
+# define path to where you want the case to be built
+export E3SM_CASE=/global/cfs/cdirs/m5260/kuyeda/20260318.v3.SORRME3r3.CRYO2010.bluepulse-beta1-dvd.perlmutter
+
+# Create case
+./create_newcase \
+  -case $E3SM_CASE \
+  -compiler gnu \
+  -mach pm-cpu \
+  -project m5260 \
+  -compset CRYO2010 \
+  -res ne30pg2_r05_SOwISC12to30E3r3
+
+# go into case directory & change processor + run time settings
+cd /global/cfs/cdirs/m5260/kuyeda/20260318.v3.SORRME3r3.CRYO2010.bluepulse-beta1-dvd.perlmutter
+
+# Processor settings, 128 cores
+./xmlchange CPL_NTASKS=1920
+./xmlchange CPL_ROOTPE=0
+
+./xmlchange ATM_NTASKS=1920
+./xmlchange ATM_ROOTPE=0
+
+./xmlchange LND_NTASKS=1920
+./xmlchange LND_ROOTPE=0
+
+./xmlchange ICE_NTASKS=1920
+./xmlchange ICE_ROOTPE=0
+
+./xmlchange OCN_NTASKS=1920
+./xmlchange OCN_ROOTPE=0
+
+./xmlchange ROF_NTASKS=1920
+./xmlchange ROF_ROOTPE=0
+
+./xmlchange GLC_NTASKS=256
+./xmlchange GLC_ROOTPE=0
+
+./xmlchange WAV_NTASKS=256
+./xmlchange WAV_ROOTPE=0
+
+./xmlchange IAC_NTASKS=1
+./xmlchange IAC_ROOTPE=0
+
+./xmlchange ESP_NTASKS=1
+./xmlchange ESP_ROOTPE=0
+
+# change the run time directory
+#First, change the run directory
+./xmlchange RUNDIR=/global/cfs/cdirs/m5260/kuyeda/20260318.v3.SORRME3r3.CRYO2010.bluepulse-beta1-dvd.perlmutter/run
+
+# Now change the build directory
+./xmlchange EXEROOT=/global/cfs/cdirs/m5260/kuyeda/20260318.v3.SORRME3r3.CRYO2010.bluepulse-beta1-dvd.perlmutter/bld
+
+# runtime settings
+# Tell the model to run in restart mode
+./xmlchange RUN_TYPE=hybrid
+./xmlchange RUN_REFCASE=20260520.v3.SORRME3r3.CRYO2010.bluepulse-control.chrysalis
+
+# Point the model to Carolyn's restart files -- change this to where you have the files stored 
+./xmlchange RUN_REFDIR=/global/cfs/cdirs/m5260/kuyeda/0200-01-01-00000
+./xmlchange GET_REFCASE=TRUE
+
+# Complete simulation after 1 month! 
+./xmlchange STOP_OPTION=nmonths
+./xmlchange STOP_N=1
+
+#Change the reference date to year 200
+./xmlchange RUN_REFDATE=0200-01-01
+
+# Change the requested wall time to 2 hours
+./xmlchange JOB_WALLCLOCK_TIME=02:00:00
+
+# For the real simulation, change to
+#./xmlchange STOP_OPTION=nyears
+#./xmlchange STOP_N=10
+#./xmlchange JOB_WALLCLOCK_TIME=48:00:00
+
+#Write restart files once a year, not applicable for this test case
+#./xmlchange REST_OPTION=nyears
+#./xmlchange STOP_N=1
+
+./xmlchange RUN_STARTDATE=0200-01-01
+
+# if needed
+# ./case.build --clean
+
+./case.setup
+
+# confirm the processor settings worked
+./preview_run
+
+module load python
+
+# build the case
+./case.build

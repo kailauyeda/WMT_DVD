@@ -1,0 +1,84 @@
+SORRM QU240 (240 km case)
+Following Dylan's HackMD instructions
+https://hackmd.io/@dschlichting/BJgjtBRBMe
+
+cd /pscratch/sd/k/kuyeda/e3sm_scratch/pm-cpu/QU240_GMPASO-JRA-DVD_tests
+
+# Once it's done, there are a few things we will change to run with DVD and WMT. We need snapshots of layer thickness to get dM/dt. 
+# Editing streams and namelists are different than standalone MPAS. 
+# There will be a lot of stuff in /run, and the runtime namelists will be named differently for each component in this folder.
+
+# To edit streams:
+
+cp run/streams.ocean SourceMods/src.mpaso/.
+
+# SourceMods/src.mpaso/streams.ocean will overwrite anything in the run directory. 
+# In most coupled simulations, MPAS-O has snapshots turned off by default. Do:
+
+vi SourceMods/src.mpaso/streams.ocean
+
+# Then edit the output interval to turn on snapshots output 
+
+<stream name="output"
+        type="output"
+        io_type="pnetcdf,cdf5"
+        filename_template="QU240_CMPASO-JRA-DVD_tests.mpaso.hist.$Y-$M-$D_$S.nc"
+        filename_interval="00-01-00_00:00:00"
+        clobber_mode="truncate"
+        reference_time="01-01-01_00:00:00"
+        output_interval="00-01-00_00:00:00">
+
+# To change the mpaso namelist, edit user_nl_mpaso, which overrides mpaso_in do:
+vi user_nl_mpaso
+
+# then add the following
+config_am_timeseriesstatsmonthly_enable = .true.
+config_use_numericalmixingtracers = .true.
+config_AM_discreteVarianceDecay_enable = .true.
+config_AM_discreteVarianceDecay_compute_interval = 'dt'
+config_AM_discreteVarianceDecay_output_stream = 'discreteVarianceDecayOutput'
+config_AM_discreteVarianceDecay_compute_on_startup = .false.
+config_AM_discreteVarianceDecay_write_on_startup = .false.
+
+# And that should be it for this test. 
+# There are two ways to run a case, since we are doing a quick debug in an interactive node.
+
+salloc --nodes 2 --qos interactive --time 02:00:00 --constraint cpu --account=m5260
+
+module load python
+/pscratch/sd/k/kuyeda/e3sm_scratch/pm-cpu/QU240_GMPASO-JRA-DVD_tests/.case.run --resubmit
+
+# Print statements in the terminal will tell you when the model execution begins & ends. 
+# For a batch submission, we would normally do ./case.submit.
+
+# ======================================
+## TO RUN SORRM WITH THE DVD DIAGNOSITCS
+# set up SORRM branch with DVD
+git clone --branch bluepulse-beta1 git@github.com:darincomeau/E3SM.git
+
+# cd to the new branch
+cd E3SM
+
+# add dylan's git branch and fetch it
+git remote add dylan git@github.com:dylanschlichting/E3SM.git
+git fetch dylan
+
+# create the new branch
+git checkout -b sorrm_w_dvd
+
+# look at log
+ git log --oneline dylan/bichan_10022025
+
+# Since this has bichan modifications in it, we will only take the first 3 DVD commits:
+git cherry-pick 6d168260d2^..1f67790f48
+
+## Configuration for turning on DVD in $SCRATCH/e3sm_scratch/pm-cpu//QU240_GMPASO-JRA-DVD_tests/run/mpaso_in
+
+&am_discretevariancedecay
+ config_am_discretevariancedecay_compute_interval = 'dt'
+ config_am_discretevariancedecay_compute_on_startup = .false.
+ config_am_discretevariancedecay_enable = .true.
+ config_am_discretevariancedecay_output_stream = 'discreteVarianceDecayOutput'
+ config_am_discretevariancedecay_write_on_startup = .false.
+
+
