@@ -1,4 +1,4 @@
-SORRM From 200 year restart
+fSORRM From 200 year restart
 Following Dylan's HackMD instructions
 https://hackmd.io/@dschlichting/BJgjtBRBMe
 
@@ -22,6 +22,8 @@ cd $E3SM_REPO/cime/scripts
 
 # define path to where you want the case to be built
 export E3SM_CASE=/global/cfs/cdirs/m5260/kuyeda/20260318.v3.SORRME3r3.CRYO2010.bluepulse-beta1-dvd.perlmutter
+
+module load python
 
 # Create case
 ./create_newcase \
@@ -79,7 +81,8 @@ cd /global/cfs/cdirs/m5260/kuyeda/20260318.v3.SORRME3r3.CRYO2010.bluepulse-beta1
 ./xmlchange RUN_REFCASE=20260520.v3.SORRME3r3.CRYO2010.bluepulse-control.chrysalis
 
 # Point the model to Carolyn's restart files -- change this to where you have the files stored 
-./xmlchange RUN_REFDIR=/global/cfs/cdirs/m5260/kuyeda/0200-01-01-00000
+# ./xmlchange RUN_REFDIR=/global/cfs/cdirs/m5260/kuyeda/0200-01-01-00000
+./xmlchange RUN_REFDIR=/pscratch/sd/c/cbegeman/20260520.v3.SORRME3r3.CRYO2010.bluepulse-control.chrysalis/archive/rest/0200-01-01-00000
 ./xmlchange GET_REFCASE=TRUE
 
 # Complete simulation after 1 month! 
@@ -105,6 +108,9 @@ cd /global/cfs/cdirs/m5260/kuyeda/20260318.v3.SORRME3r3.CRYO2010.bluepulse-beta1
 
 # if needed
 # ./case.build --clean
+# ./case.setup --r
+
+module load python
 
 ./case.setup
 
@@ -115,3 +121,6 @@ module load python
 
 # build the case
 ./case.build
+
+## if you just modified the namelists or something "small"
+./case.submit
