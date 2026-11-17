@@ -22,8 +22,8 @@ filename = 'Ronne_Filchner_Slope_SORRM_HR_test5'
 ========================
 
 Ronne-Filchner Transect 
-Transect chosen based on "Ice shelf water overflow and bottom water formation in the southern Weddell Sea" (Foldvik et al., 2004)
-
+* Transect chosen based on "Ice shelf water overflow and bottom water formation in the southern Weddell Sea" (Foldvik et al., 2004)
+* Transect was then extended to follow the ice shelf break/horizontal density gradient
 * This is for a transect that goes across all of the ice shelf
 * So it should show where theere is import onto the shelf & export off of it
 
